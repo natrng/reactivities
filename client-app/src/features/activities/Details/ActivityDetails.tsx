@@ -24,7 +24,7 @@ export const ActivityDetails: React.FC<IProp> = ({ activity, setEditMode,getActi
         <Card.Description>{activity?.description}</Card.Description>
       </Card.Content>
       <Card.Content extra>
-        <Button.Group widths={3}>
+        <Button.Group widths={2}>
           <Button basic color="blue" content="Edit" onClick={() => setEditMode(true)}></Button>
           <Button basic color="grey" content="Cancel" onClick={()=>getActivity(null)}></Button>
         </Button.Group>
