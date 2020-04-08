@@ -12,20 +12,30 @@ interface IProps {
   editMode: boolean;
   setEditMode: (editMode: boolean) => void;
   getActivity: (activity: IActivity | null) => void;
+  handleCreateActivity: (activity: IActivity) => void;
+  handleEditActivity: (activity: IActivity) => void;
+  handleDeleteActivity: (id: string) => void;
 }
 
 export const ActivityDashboard: React.FC<IProps> = ({
+  getActivity,
   activities,
   selectActivity,
   activity,
   editMode,
   setEditMode,
-  getActivity
+  handleCreateActivity,
+  handleEditActivity,
+  handleDeleteActivity
 }) => {
   return (
     <Grid>
       <Grid.Column width={10}>
-        <ActivityList activities={activities} selectActivity={selectActivity} />
+        <ActivityList
+          activities={activities}
+          selectActivity={selectActivity}
+          handleDeleteActivity={handleDeleteActivity}
+        />
       </Grid.Column>
       <Grid.Column width={6}>
         {activity && !editMode && (
@@ -36,7 +46,13 @@ export const ActivityDashboard: React.FC<IProps> = ({
           />
         )}
         {editMode && (
-          <ActivityForm activity={activity!} setEditMode={setEditMode} />
+          <ActivityForm
+            key={activity?.id || 0}
+            activity={activity!}
+            setEditMode={setEditMode}
+            handleCreateActivity={handleCreateActivity}
+            handleEditActivity={handleEditActivity}
+          />
         )}
       </Grid.Column>
     </Grid>
