@@ -7,6 +7,10 @@ import { Router } from "react-router-dom";
 import ScrollToTop from "./app/layout/ScrollToTop";
 import {createBrowserHistory} from 'history';
 import 'react-toastify/dist/ReactToastify.min.css';
+import 'react-widgets/dist/css/react-widgets.css'
+import dataFnsLocalizer from 'react-widgets-date-fns';
+
+dataFnsLocalizer();
 
 export const history = createBrowserHistory();
 
