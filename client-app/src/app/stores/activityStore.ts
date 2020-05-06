@@ -2,6 +2,8 @@ import { observable, action, computed, configure, runInAction } from "mobx";
 import { createContext, SyntheticEvent } from "react";
 import { IActivity } from "../models/activity";
 import agent from "../api/agent";
+import { history } from "../..";
+import { toast } from "react-toastify";
 
 configure({ enforceActions: "always" });
 
@@ -26,7 +28,7 @@ class ActivityStore {
     );
     return Object.entries(
       sortActivities.reduce((activities, activity) => {
-        const date = activity.date.toISOString().split('T')[0];
+        const date = activity.date.toISOString().split("T")[0];
         activities[date] = activities[date]
           ? [...activities[date], activity]
           : [activity];
@@ -57,6 +59,7 @@ class ActivityStore {
     let activity = this.getActivity(id);
     if (activity) {
       this.activity = activity;
+      return activity;
     } else {
       this.loadingInitial = true;
       try {
@@ -64,8 +67,10 @@ class ActivityStore {
         runInAction("getting activity", () => {
           activity.date = new Date(activity.date);
           this.activity = activity;
+          this.activityRegistry.set(activity.id, activity);
           this.loadingInitial = false;
         });
+        return activity;
       } catch (error) {
         runInAction("getting activity error", () => {
           this.loadingInitial = false;
@@ -89,13 +94,14 @@ class ActivityStore {
       await agent.Activities.create(activity);
       runInAction("create activity", () => {
         this.activityRegistry.set(activity.id, activity);
-        this.editMode = false;
         this.submitting = false;
       });
+      history.push(`/activities/${activity.id}`);
     } catch (error) {
       runInAction("create activity error", () => {
         this.submitting = false;
       });
+      toast.error("problem submitting data");
       console.log(error);
     }
   };
@@ -107,13 +113,14 @@ class ActivityStore {
       runInAction("editing activity", () => {
         this.activityRegistry.set(activity.id, activity);
         this.activity = activity;
-        this.editMode = false;
         this.submitting = false;
       });
+      history.push(`/activities/${activity.id}`);
     } catch (error) {
       runInAction("edit activity error", () => {
         this.submitting = false;
       });
+      toast.error("problem submitting data");
       console.log(error);
     }
   };
