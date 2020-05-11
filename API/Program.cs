@@ -15,17 +15,16 @@ namespace API
         public static void Main(string[] args)
         {
             var host = CreateWebHostBuilder(args).Build();
-            
+
             using (var scope = host.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
-                try 
-                
+                try
                 {
                     var context = services.GetRequiredService<DataContext>();
                     var userManager = services.GetRequiredService<UserManager<AppUser>>();
                     context.Database.Migrate();
-                    Seed.SeedData(context, userManager).Wait();
+                    Seed.SeedData(context, userManager);
                 }
                 catch (Exception ex)
                 {
