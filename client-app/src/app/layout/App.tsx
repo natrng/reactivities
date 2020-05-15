@@ -2,7 +2,6 @@ import React, { useEffect, useContext, Fragment } from "react";
 import { Container } from "semantic-ui-react";
 import NavBar from "../../features/nav/NavBar";
 import { observer } from "mobx-react-lite";
-import ActivityStore from "../stores/activityStore";
 import LoadingComponent from "./LoadingComponent";
 import ActivityDashboard from "../../features/activities/dashaboard/ActivityDashboard";
 import { Route, withRouter, RouteComponentProps, Switch } from "react-router-dom";
@@ -11,15 +10,18 @@ import ActivityForm from "../../features/activities/form/ActivityForm";
 import ActivityDetails from "../../features/activities/Details/ActivityDetails";
 import NotFound from "./NotFound";
 import { ToastContainer } from 'react-toastify';
+import {  RootStoreContext } from "../stores/rootStore";
+import { LoginForm } from "../../features/user/LoginForm";
 
 const App: React.FC<RouteComponentProps> = ({ location }) => {
-  const activityStore = useContext(ActivityStore);
+  const rootStore = useContext(RootStoreContext);
+  const {loadActivities, loadingInitial} = rootStore.activityStore;
 
   useEffect(() => {
-    activityStore.loadActivities();
-  }, [activityStore]);
+    loadActivities();
+  }, [loadActivities]);
 
-  if (activityStore.loadingInitial)
+  if (loadingInitial)
     return <LoadingComponent content="Loading activities" />;
 
   return (
@@ -34,6 +36,7 @@ const App: React.FC<RouteComponentProps> = ({ location }) => {
               <Route exact path="/activities" component={ActivityDashboard} />
               <Route path="/activities/:id" component={ActivityDetails} />
               <Route key={location.key} path={["/createActivity", '/manage/:id']} component={ActivityForm} />
+              <Route path='/login' component={LoginForm} />
               <Route component={NotFound} />
             </Switch>
           </Container>
