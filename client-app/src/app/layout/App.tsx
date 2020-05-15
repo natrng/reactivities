@@ -12,20 +12,27 @@ import NotFound from "./NotFound";
 import { ToastContainer } from 'react-toastify';
 import {  RootStoreContext } from "../stores/rootStore";
 import { LoginForm } from "../../features/user/LoginForm";
+import ModalContainer from "../common/modals/ModalContainer";
 
 const App: React.FC<RouteComponentProps> = ({ location }) => {
   const rootStore = useContext(RootStoreContext);
-  const {loadActivities, loadingInitial} = rootStore.activityStore;
+  const {setAppLoaded, token, appLoaded} = rootStore.commonStore;
+  const {getUser} = rootStore.userStore;
 
-  useEffect(() => {
-    loadActivities();
-  }, [loadActivities]);
+  useEffect(()=> {
+    if(token){
+      getUser().finally(() => setAppLoaded());
+    }else{
+      setAppLoaded();
+    }
+  }, [token, setAppLoaded, getUser])
 
-  if (loadingInitial)
+  if (!appLoaded)
     return <LoadingComponent content="Loading activities" />;
 
   return (
     <Fragment>
+      <ModalContainer/>
       <ToastContainer position='bottom-right' />
       <Route exact path="/" component={HomePage} />
       <Route path={'/(.+)'} render={() => (
