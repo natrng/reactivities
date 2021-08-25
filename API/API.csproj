@@ -4,7 +4,7 @@
     <UserSecretsId>9b871d9e-1faf-41a4-a82e-6b5476c9d39b</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.2"/>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.18"/>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.2"/>
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.2"/>
   </ItemGroup>
